@@ -2,8 +2,11 @@
 {
     public class User
     {
-        public User(string email, string username, string password, ICollection<Subscription> subscriptions) : this(email, username, password)
+        public User(string email, string username, string password, ICollection<Subscription> subscriptions)
         {
+            Email = email;
+            Username = username;
+            Password = password;
             Subscriptions = subscriptions;
         }
 
