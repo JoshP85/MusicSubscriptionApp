@@ -3,6 +3,7 @@ using Amazon.DynamoDBv2.DataModel;
 using Microsoft.AspNetCore.Mvc;
 using MusicSubscriptionApp.Data;
 using MusicSubscriptionApp.Models;
+using MusicSubscriptionApp.Security;
 using System.Diagnostics;
 
 namespace MusicSubscriptionApp.Controllers
@@ -25,6 +26,15 @@ namespace MusicSubscriptionApp.Controllers
             await CreateTables.CreateMusicTableAsync(client);
 
             await CreateTables.CreateLoginTableAsync(client);
+
+            return View();
+        }
+
+
+        public async Task<IActionResult> IndexAsync(string email, string password)
+        {
+            await Login.ValidateLoginCredentials(client);
+
 
             return View();
         }

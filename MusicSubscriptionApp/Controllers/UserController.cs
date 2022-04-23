@@ -2,10 +2,9 @@
 
 namespace MusicSubscriptionApp.Controllers
 {
-    public class SubscriptionController : Controller
+    public class UserController : Controller
     {
-        // GET: SubscriptionController
-        public ActionResult Index()
+        public IActionResult Dashboard()
         {
             return View();
         }
