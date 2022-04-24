@@ -30,11 +30,16 @@ namespace MusicSubscriptionApp.Controllers
             return View();
         }
 
-
+        [Route("Home/Login")]
         public async Task<IActionResult> IndexAsync(string email, string password)
         {
-            await Login.ValidateLoginCredentials(client);
+            /*var userMatch = */
+            var user = await Login.ValidateLoginCredentials(client, email, password);
 
+            if (user != null)
+            {
+                return RedirectToAction("Dashboard", "User");
+            }
 
             return View();
         }

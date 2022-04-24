@@ -96,7 +96,7 @@ namespace MusicSubscriptionApp.Data
                                   },
                                   new AttributeDefinition
                                   {
-                                      AttributeName = "User_Name",
+                                      AttributeName = "Password",
                                       AttributeType = "S"
                                   }
                               },
@@ -109,7 +109,7 @@ namespace MusicSubscriptionApp.Data
                                   },
                                   new KeySchemaElement
                                   {
-                                      AttributeName = "User_Name",
+                                      AttributeName = "Password",
                                       KeyType = "RANGE"
                                   }
                               },
