@@ -38,9 +38,10 @@ namespace MusicSubscriptionApp.Controllers
 
             if (user != null)
             {
+
                 return RedirectToAction("Dashboard", "User");
             }
-
+            ModelState.AddModelError("LoginFailed", "Email or Password is invalid.");
             return View();
         }
 

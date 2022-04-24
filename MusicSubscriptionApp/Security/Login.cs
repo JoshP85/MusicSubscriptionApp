@@ -6,14 +6,13 @@ namespace MusicSubscriptionApp.Security
 {
     public class Login
     {
-
         public static async Task<User> ValidateLoginCredentials(IAmazonDynamoDB client, string email, string password)
         {
             if (!(email == null) || !(password == null))
             {
                 Table tableName = Table.LoadTable(client, "login");
 
-                Document UserDocument = await tableName.GetItemAsync(email, password);
+                Document UserDocument = await tableName.GetItemAsync(email);
 
                 if (UserDocument != null)
                 {
@@ -23,7 +22,9 @@ namespace MusicSubscriptionApp.Security
                         Username = UserDocument["User_Name"],
                         Password = UserDocument["Password"],
                     };
-                    return user;
+
+                    if (user.Password == password)
+                        return user;
                 }
             }
             return null;

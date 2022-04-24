@@ -94,11 +94,6 @@ namespace MusicSubscriptionApp.Data
                                       AttributeName = "Email",
                                       AttributeType = "S"
                                   },
-                                  new AttributeDefinition
-                                  {
-                                      AttributeName = "Password",
-                                      AttributeType = "S"
-                                  }
                               },
                     KeySchema = new List<KeySchemaElement>()
                               {
@@ -107,11 +102,6 @@ namespace MusicSubscriptionApp.Data
                                       AttributeName = "Email",
                                       KeyType = "HASH"
                                   },
-                                  new KeySchemaElement
-                                  {
-                                      AttributeName = "Password",
-                                      KeyType = "RANGE"
-                                  }
                               },
                     ProvisionedThroughput = new ProvisionedThroughput
                     {
