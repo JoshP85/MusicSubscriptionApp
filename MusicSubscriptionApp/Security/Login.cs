@@ -1,5 +1,5 @@
 ﻿using Amazon.DynamoDBv2;
-using Amazon.DynamoDBv2.DocumentModel;
+using MusicSubscriptionApp.AWS;
 using MusicSubscriptionApp.Models;
 
 namespace MusicSubscriptionApp.Security
@@ -10,19 +10,10 @@ namespace MusicSubscriptionApp.Security
         {
             if (!(email == null) || !(password == null))
             {
-                Table tableName = Table.LoadTable(client, "login");
+                User user = await DynamoDB.GetUser(client, email);
 
-                Document UserDocument = await tableName.GetItemAsync(email);
-
-                if (UserDocument != null)
+                if (user != null)
                 {
-                    User user = new()
-                    {
-                        Email = UserDocument["Email"],
-                        Username = UserDocument["User_Name"],
-                        Password = UserDocument["Password"],
-                    };
-
                     if (user.Password == password)
                         return user;
                 }

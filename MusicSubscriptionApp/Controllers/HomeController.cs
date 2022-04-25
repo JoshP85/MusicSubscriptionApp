@@ -6,6 +6,7 @@ using MusicSubscriptionApp.Models;
 using MusicSubscriptionApp.Security;
 using System.Diagnostics;
 
+
 namespace MusicSubscriptionApp.Controllers
 {
     public class HomeController : Controller
@@ -30,18 +31,19 @@ namespace MusicSubscriptionApp.Controllers
             return View();
         }
 
-        [Route("Home/Login")]
+        [HttpPost]
         public async Task<IActionResult> IndexAsync(string email, string password)
         {
-            /*var userMatch = */
-            var user = await Login.ValidateLoginCredentials(client, email, password);
+            User user = await Login.ValidateLoginCredentials(client, email, password);
 
             if (user != null)
             {
-
+                HttpContext.Session.SetString(nameof(Models.User.Email), user.Email);
                 return RedirectToAction("Dashboard", "User");
             }
+
             ModelState.AddModelError("LoginFailed", "Email or Password is invalid.");
+
             return View();
         }
 

@@ -3,16 +3,16 @@ namespace MusicSubscriptionApp.Models
 {
     public class User
     {
-        public User()
-        {
-        }
+        /*        public User()
+                {
+                }
 
-        public User(string email, string username, string password)
-        {
-            Email = email;
-            Username = username;
-            Password = password;
-        }
+                public User(string email, string username, string password)
+                {
+                    Email = email;
+                    Username = username;
+                    Password = password;
+                }*/
 
         [Required(ErrorMessage = "Email is required")]
         public string Email { get; set; }
