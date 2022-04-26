@@ -1,0 +1,54 @@
+{
+  "logins": [
+    {
+      "email": "s36556120@student.rmit.edu.au",
+      "user_name": "Joshua Phillips0",
+      "password": "012345"
+    },
+    {
+      "email": "s36556121@student.rmit.edu.au",
+      "user_name": "Joshua Phillips1",
+      "password": "123456"
+    },
+    {
+      "email": "s36556122@student.rmit.edu.au",
+      "user_name": "Joshua Phillips2",
+      "password": "234567"
+    },
+    {
+      "email": "s36556123@student.rmit.edu.au",
+      "user_name": "Joshua Phillips3",
+      "password": "345678"
+    },
+    {
+      "email": "s36556124@student.rmit.edu.au",
+      "user_name": "Joshua Phillips4",
+      "password": "456789"
+    },
+    {
+      "email": "s36556125@student.rmit.edu.au",
+      "user_name": "Joshua Phillips5",
+      "password": "567890"
+    },
+    {
+      "email": "s36556126@student.rmit.edu.au",
+      "user_name": "Joshua Phillips6",
+      "password": "678901"
+    },
+    {
+      "email": "s36556127@student.rmit.edu.au",
+      "user_name": "Joshua Phillips7",
+      "password": "789012"
+    },
+    {
+      "email": "s36556128@student.rmit.edu.au",
+      "user_name": "Joshua Phillips8",
+      "password": "890123"
+    },
+    {
+      "email": "s36556129@student.rmit.edu.au",
+      "user_name": "Joshua Phillips9",
+      "password": "901234"
+    }
+  ]
+}

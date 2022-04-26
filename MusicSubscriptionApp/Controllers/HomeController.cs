@@ -1,22 +1,54 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Amazon.DynamoDBv2;
+using Amazon.DynamoDBv2.DataModel;
+using Microsoft.AspNetCore.Mvc;
+using MusicSubscriptionApp.Data;
 using MusicSubscriptionApp.Models;
+using MusicSubscriptionApp.Security;
 using System.Diagnostics;
+
 
 namespace MusicSubscriptionApp.Controllers
 {
     public class HomeController : Controller
     {
+        private readonly IDynamoDBContext dynamoDBContext;
+        private readonly IAmazonDynamoDB client;
         private readonly ILogger<HomeController> _logger;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(IDynamoDBContext dynamoDBContext, IAmazonDynamoDB client, ILogger<HomeController> logger)
         {
+            this.dynamoDBContext = dynamoDBContext;
+            this.client = client;
             _logger = logger;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> IndexAsync()
         {
+            await CreateTables.CreateMusicTableAsync(client);
+
+            await CreateTables.CreateLoginTableAsync(client);
+
             return View();
         }
+
+        [HttpPost]
+        public async Task<IActionResult> IndexAsync(string email, string password)
+        {
+            AppUser user = await Login.ValidateLoginCredentials(client, email, password);
+
+            if (user != null)
+            {
+                HttpContext.Session.SetString(nameof(AppUser.Email), user.Email);
+                return RedirectToAction("Dashboard", "AppUser");
+            }
+
+            ModelState.AddModelError("LoginFailed", "Email or Password is invalid.");
+
+            return View();
+        }
+
+
+
 
         public IActionResult Privacy()
         {
