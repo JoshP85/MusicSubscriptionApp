@@ -43,20 +43,22 @@ namespace MusicSubscriptionApp.Models
             {
                 return false;
             }
-            var requestSeed = new PutItemRequest
+            if (await GetAppUser(client, newUser.Email) == null)
             {
-                TableName = "login",
-                Item = new Dictionary<string, AttributeValue>()
+                var requestSeed = new PutItemRequest
+                {
+                    TableName = "login",
+                    Item = new Dictionary<string, AttributeValue>()
                     {
                         { "Email", new AttributeValue {S = newUser.Email.ToString() } },
                         { "User_Name", new AttributeValue {S = newUser.Username.ToString() } },
                         { "Password", new AttributeValue {S = newUser.Password.ToString() } },
-
-                    }
-            };
-            await client.PutItemAsync(requestSeed);
-
-            return true;
+                    },
+                };
+                await client.PutItemAsync(requestSeed);
+                return true;
+            }
+            return false;
         }
     }
 }
