@@ -52,11 +52,17 @@ namespace MusicSubscriptionApp.Controllers
             return View();
         }
 
-        /*        [HttpPost]
-                public IActionResult Register()
-                {
-                    return View();
-                }*/
+        [HttpPost]
+        public async Task<IActionResult> Register([Bind("Email, Username, Password")] AppUser newUser)
+        {
+            var isSuccessful = await AppUser.CreateAppUser(client, newUser);
+            if (isSuccessful)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+            ModelState.AddModelError("RegisterFailed", "The email already exists.");
+            return View();
+        }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()

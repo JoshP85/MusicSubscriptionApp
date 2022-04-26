@@ -1,5 +1,6 @@
 ﻿using Amazon.DynamoDBv2;
 using Amazon.DynamoDBv2.DocumentModel;
+using Amazon.DynamoDBv2.Model;
 using System.ComponentModel.DataAnnotations;
 
 namespace MusicSubscriptionApp.Models
@@ -36,11 +37,26 @@ namespace MusicSubscriptionApp.Models
             return null;
         }
 
-        public static async Task<bool> CreateAppUser(IAmazonDynamoDB client)
+        public static async Task<bool> CreateAppUser(IAmazonDynamoDB client, AppUser newUser)
         {
+            if (newUser is null)
+            {
+                return false;
+            }
+            var requestSeed = new PutItemRequest
+            {
+                TableName = "login",
+                Item = new Dictionary<string, AttributeValue>()
+                    {
+                        { "Email", new AttributeValue {S = newUser.Email.ToString() } },
+                        { "User_Name", new AttributeValue {S = newUser.Username.ToString() } },
+                        { "Password", new AttributeValue {S = newUser.Password.ToString() } },
 
+                    }
+            };
+            await client.PutItemAsync(requestSeed);
 
-            return false;
+            return true;
         }
     }
 }

@@ -30,6 +30,7 @@
                 <label for="floatingInput">Password</label>
                 <span asp-validation-for="Password"></span>
             </div>
+            @Html.ValidationMessage("RegisterFailed", new {@class = "text-danger"})
             <div class="form-group text-center">
                 <input type="submit" value="Register" class="btn btn-primary btn-login text-uppercase fw-bold" />
                 <a class="btn btn-primary btn-login text-uppercase fw-bold"  asp-area="" asp-controller="Home" asp-action="Index">Back</a>
