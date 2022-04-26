@@ -34,12 +34,12 @@ namespace MusicSubscriptionApp.Controllers
         [HttpPost]
         public async Task<IActionResult> IndexAsync(string email, string password)
         {
-            User user = await Login.ValidateLoginCredentials(client, email, password);
+            AppUser user = await Login.ValidateLoginCredentials(client, email, password);
 
             if (user != null)
             {
-                HttpContext.Session.SetString(nameof(Models.User.Email), user.Email);
-                return RedirectToAction("Dashboard", "User");
+                HttpContext.Session.SetString(nameof(AppUser.Email), user.Email);
+                return RedirectToAction("Dashboard", "AppUser");
             }
 
             ModelState.AddModelError("LoginFailed", "Email or Password is invalid.");

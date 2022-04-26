@@ -2,26 +2,29 @@
 using Amazon.DynamoDBv2;
 using Amazon.DynamoDBv2.DataModel;
 using Microsoft.AspNetCore.Mvc;
-using MusicSubscriptionApp.AWS;
+using MusicSubscriptionApp.Models;
+using MusicSubscriptionApp.Services;
 
 namespace MusicSubscriptionApp.Controllers
 {
     [RequireSession]
-    public class UserController : Controller
+    public class AppUserController : Controller
     {
+        private string userEmail => HttpContext.Session.GetString(nameof(AppUser.Email));
         private readonly IDynamoDBContext dynamoDBContext;
         private readonly IAmazonDynamoDB client;
 
-        public UserController(IDynamoDBContext dynamoDBContext, IAmazonDynamoDB client)
+        public AppUserController(IDynamoDBContext dynamoDBContext, IAmazonDynamoDB client)
         {
             this.dynamoDBContext = dynamoDBContext;
             this.client = client;
         }
 
-        private string userEmail => HttpContext.Session.GetString(nameof(Models.User.Email));
+
+
         public IActionResult Dashboard()
         {
-            Models.User user = DynamoDB.GetUser(client, userEmail).Result;
+            AppUser user = UserControllerServices.GetUser(client, userEmail).Result;
 
             return View(user);
         }

@@ -2,12 +2,11 @@
 using Amazon.DynamoDBv2.DocumentModel;
 using MusicSubscriptionApp.Models;
 
-namespace MusicSubscriptionApp.AWS
+namespace MusicSubscriptionApp.Services
 {
-    public class DynamoDB
+    public class UserControllerServices
     {
-
-        public static async Task<User> GetUser(IAmazonDynamoDB client, string email)
+        public static async Task<AppUser> GetUser(IAmazonDynamoDB client, string email)
         {
             if (email != null)
             {
@@ -17,7 +16,7 @@ namespace MusicSubscriptionApp.AWS
 
                 if (UserDocument != null)
                 {
-                    User user = new()
+                    AppUser user = new()
                     {
                         Email = UserDocument["Email"],
                         Username = UserDocument["User_Name"],

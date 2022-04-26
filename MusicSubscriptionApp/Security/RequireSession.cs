@@ -8,7 +8,7 @@ namespace A1T1s3655612.Security
     {
         public override void OnActionExecuting(ActionExecutingContext filterContext)
         {
-            var userEmail = filterContext.HttpContext.Session.GetString(nameof(User.Email));
+            var userEmail = filterContext.HttpContext.Session.GetString(nameof(AppUser.Email));
 
             if (userEmail == null)
             {
