@@ -19,8 +19,6 @@ namespace MusicSubscriptionApp.Controllers
             this.client = client;
         }
 
-
-
         public IActionResult Dashboard()
         {
             AppUser user = AppUser.GetAppUser(client, userEmail).Result;

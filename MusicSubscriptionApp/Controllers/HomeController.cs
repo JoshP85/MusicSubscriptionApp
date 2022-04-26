@@ -47,13 +47,16 @@ namespace MusicSubscriptionApp.Controllers
             return View();
         }
 
-
-
-
-        public IActionResult Privacy()
+        public IActionResult Register()
         {
             return View();
         }
+
+        /*        [HttpPost]
+                public IActionResult Register()
+                {
+                    return View();
+                }*/
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()

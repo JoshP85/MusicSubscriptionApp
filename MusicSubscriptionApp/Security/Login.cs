@@ -1,6 +1,5 @@
 ﻿using Amazon.DynamoDBv2;
 using MusicSubscriptionApp.Models;
-using MusicSubscriptionApp.Services;
 
 namespace MusicSubscriptionApp.Security
 {
@@ -10,7 +9,7 @@ namespace MusicSubscriptionApp.Security
         {
             if (!(email == null) || !(password == null))
             {
-                AppUser user = await AppUserControllerServices.GetAppUser(client, email);
+                AppUser user = await AppUser.GetAppUser(client, email);
 
                 if (user != null)
                 {
