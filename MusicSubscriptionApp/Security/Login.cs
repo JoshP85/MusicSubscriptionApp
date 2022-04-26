@@ -10,7 +10,7 @@ namespace MusicSubscriptionApp.Security
         {
             if (!(email == null) || !(password == null))
             {
-                AppUser user = await UserControllerServices.GetUser(client, email);
+                AppUser user = await AppUserControllerServices.GetAppUser(client, email);
 
                 if (user != null)
                 {

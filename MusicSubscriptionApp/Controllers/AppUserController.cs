@@ -3,7 +3,6 @@ using Amazon.DynamoDBv2;
 using Amazon.DynamoDBv2.DataModel;
 using Microsoft.AspNetCore.Mvc;
 using MusicSubscriptionApp.Models;
-using MusicSubscriptionApp.Services;
 
 namespace MusicSubscriptionApp.Controllers
 {
@@ -24,7 +23,7 @@ namespace MusicSubscriptionApp.Controllers
 
         public IActionResult Dashboard()
         {
-            AppUser user = UserControllerServices.GetUser(client, userEmail).Result;
+            AppUser user = AppUser.GetAppUser(client, userEmail).Result;
 
             return View(user);
         }

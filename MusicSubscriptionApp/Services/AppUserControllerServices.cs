@@ -4,9 +4,9 @@ using MusicSubscriptionApp.Models;
 
 namespace MusicSubscriptionApp.Services
 {
-    public class UserControllerServices
+    public class AppUserControllerServices
     {
-        public static async Task<AppUser> GetUser(IAmazonDynamoDB client, string email)
+        public static async Task<AppUser> GetAppUser(IAmazonDynamoDB client, string email)
         {
             if (email != null)
             {
