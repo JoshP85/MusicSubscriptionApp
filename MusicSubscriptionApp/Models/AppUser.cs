@@ -1,64 +1,44 @@
-﻿using Amazon.DynamoDBv2;
-using Amazon.DynamoDBv2.DocumentModel;
-using Amazon.DynamoDBv2.Model;
+﻿using Amazon.DynamoDBv2.DataModel;
 using System.ComponentModel.DataAnnotations;
 
 namespace MusicSubscriptionApp.Models
 {
+    [DynamoDBTable("login")]
     public class AppUser
     {
+        [DynamoDBHashKey]
         [Required(ErrorMessage = "Email is required")]
         public string Email { get; set; }
+
+        [DynamoDBProperty("User_Name")]
         [Required(ErrorMessage = "Username is required")]
         public string Username { get; set; }
+
+        [DynamoDBProperty]
         [Required(ErrorMessage = "Password is required")]
         public string Password { get; set; }
+
+        [DynamoDBProperty]
         public virtual ICollection<Subscription> Subscriptions { get; set; }
 
-        public static async Task<AppUser> GetAppUser(IAmazonDynamoDB client, string email)
+
+        public static async Task<bool> CreateAppUser(IDynamoDBContext dynamoDBContext, AppUser newUser)
         {
-            if (email != null)
-            {
-                Table tableName = Table.LoadTable(client, "login");
-
-                Document UserDocument = await tableName.GetItemAsync(email);
-
-                if (UserDocument != null)
-                {
-                    AppUser user = new()
-                    {
-                        Email = UserDocument["Email"],
-                        Username = UserDocument["User_Name"],
-                        Password = UserDocument["Password"],
-                    };
-                    return user;
-                }
-            }
-            return null;
-        }
-
-        public static async Task<bool> CreateAppUser(IAmazonDynamoDB client, AppUser newUser)
-        {
-            if (newUser is null)
+            if (dynamoDBContext.LoadAsync<AppUser>(newUser.Email).Result is not null)
             {
                 return false;
             }
-            if (await GetAppUser(client, newUser.Email) == null)
+
+            AppUser user = new AppUser
             {
-                var requestSeed = new PutItemRequest
-                {
-                    TableName = "login",
-                    Item = new Dictionary<string, AttributeValue>()
-                    {
-                        { "Email", new AttributeValue {S = newUser.Email.ToString() } },
-                        { "User_Name", new AttributeValue {S = newUser.Username.ToString() } },
-                        { "Password", new AttributeValue {S = newUser.Password.ToString() } },
-                    },
-                };
-                await client.PutItemAsync(requestSeed);
-                return true;
-            }
-            return false;
+                Email = newUser.Email,
+                Password = newUser.Password,
+                Username = newUser.Username,
+                Subscriptions = null,
+            };
+
+            await dynamoDBContext.SaveAsync(user);
+            return true;
         }
     }
 }
