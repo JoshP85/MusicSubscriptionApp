@@ -22,9 +22,14 @@ namespace MusicSubscriptionApp.Models
         public virtual ICollection<Subscription> Subscriptions { get; set; }
 
 
+        public static AppUser GetAppUser(IDynamoDBContext dynamoDBContext, string email)
+        {
+            return dynamoDBContext.LoadAsync<AppUser>(email).Result;
+        }
+
         public static async Task<bool> CreateAppUser(IDynamoDBContext dynamoDBContext, AppUser newUser)
         {
-            if (dynamoDBContext.LoadAsync<AppUser>(newUser.Email).Result is not null)
+            if (GetAppUser(dynamoDBContext, newUser.Email) is not null)
             {
                 return false;
             }

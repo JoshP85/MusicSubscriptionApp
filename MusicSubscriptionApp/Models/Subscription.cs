@@ -1,21 +1,32 @@
-﻿namespace MusicSubscriptionApp.Models
+﻿using Amazon.DynamoDBv2.DataModel;
+
+namespace MusicSubscriptionApp.Models
 {
+    [DynamoDBTable("music")]
     public class Subscription
     {
-        public Subscription(string title, string artist, string year, string webUrl, string imgUrl)
+        public Subscription(string artist, string title, string imgUrl, string webUrl, string year)
         {
-            Title = title;
             Artist = artist;
-            Year = year;
-            WebUrl = webUrl;
+            Title = title;
             ImgUrl = imgUrl;
+            WebUrl = webUrl;
+            Year = year;
         }
 
-        public string Title { get; set; }
+        [DynamoDBHashKey]
         public string Artist { get; set; }
-        public string Year { get; set; }
-        public string WebUrl { get; set; }
+
+        [DynamoDBRangeKey]
+        public string Title { get; set; }
+
+        [DynamoDBProperty("img_url")]
         public string ImgUrl { get; set; }
 
+        [DynamoDBProperty("web_url")]
+        public string WebUrl { get; set; }
+
+        [DynamoDBProperty]
+        public string Year { get; set; }
     }
 }
