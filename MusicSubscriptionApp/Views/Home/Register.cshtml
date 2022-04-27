@@ -1,0 +1,48 @@
+﻿@model MusicSubscriptionApp.Models.AppUser
+
+@{
+    ViewData["Title"] = "Register";
+}
+
+<div class="text-center">
+    <div class="container text-start">
+        <div class="row">
+            <div class="col-sm-9 col-md-7 col-lg-5 mx-auto">
+                <div class="card border-0 shadow rounded-3 my-5">
+                    <div class="card-body p-4 p-sm-5">
+                        <h4 class="card-title text-center mb-3 fw-bold fs-2">Music Subcription Online</h4>
+                        <h4 class="card-title text-center mb-1 fw-light fs-3">Register</h4>
+                        <p class="text-center">Please complete the following form</p>
+                        <form asp-controller="Home" asp-action="Register">
+                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                            <div class="form-floating mb-3">
+                                <input asp-for="Email" type="text" class="form-control" id="floatingInput" placeholder="Email">
+                                <label for="floatingInput">Email</label>
+                                <span asp-validation-for="Email"></span>
+                            </div>
+                            <div class="form-floating mb-3">
+                                <input asp-for="Username" type="text" class="form-control" id="floatingInput" placeholder="Username">
+                                <label for="floatingInput">Username</label>
+                                <span asp-validation-for="Username"></span>
+                            </div>
+                            <div class="form-floating mb-3">
+                                <input asp-for="Password" type="password" class="form-control" id="floatingInput" placeholder="Password">
+                                <label for="floatingInput">Password</label>
+                                <span asp-validation-for="Password"></span>
+                            </div>
+                            @Html.ValidationMessage("RegisterFailed", new {@class = "text-danger"})
+                            <div class="form-group text-center">
+                                <input type="submit" value="Register" class="btn btn-primary btn-login text-uppercase fw-bold" />
+                                <a class="btn btn-primary btn-login text-uppercase fw-bold"  asp-area="" asp-controller="Home" asp-action="Index">Back</a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

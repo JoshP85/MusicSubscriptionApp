@@ -28,7 +28,6 @@ namespace MusicSubscriptionApp.Data
                         { "Year", new AttributeValue {S = item.year } },
                         { "web_url", new AttributeValue {S = item.web_url } },
                         { "img_url", new AttributeValue {S = item.img_url } },
-
                     }
                 };
                 await client.PutItemAsync(requestSeed);

@@ -9,7 +9,7 @@ namespace MusicSubscriptionApp.Controllers
     [RequireSession]
     public class AppUserController : Controller
     {
-        private string userEmail => HttpContext.Session.GetString(nameof(AppUser.Email));
+        private string UserEmail => HttpContext.Session.GetString(nameof(AppUser.Email));
         private readonly IDynamoDBContext dynamoDBContext;
         private readonly IAmazonDynamoDB client;
 
@@ -19,11 +19,9 @@ namespace MusicSubscriptionApp.Controllers
             this.client = client;
         }
 
-
-
         public IActionResult Dashboard()
         {
-            AppUser user = AppUser.GetAppUser(client, userEmail).Result;
+            AppUser user = dynamoDBContext.LoadAsync<AppUser>(UserEmail).Result;
 
             return View(user);
         }

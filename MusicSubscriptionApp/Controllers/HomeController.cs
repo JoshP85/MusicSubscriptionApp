@@ -3,7 +3,6 @@ using Amazon.DynamoDBv2.DataModel;
 using Microsoft.AspNetCore.Mvc;
 using MusicSubscriptionApp.Data;
 using MusicSubscriptionApp.Models;
-using MusicSubscriptionApp.Security;
 using System.Diagnostics;
 
 
@@ -24,6 +23,7 @@ namespace MusicSubscriptionApp.Controllers
 
         public async Task<IActionResult> IndexAsync()
         {
+
             await CreateTables.CreateMusicTableAsync(client);
 
             await CreateTables.CreateLoginTableAsync(client);
@@ -32,14 +32,20 @@ namespace MusicSubscriptionApp.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> IndexAsync(string email, string password)
+        public IActionResult Index(string email, string password)
         {
-            AppUser user = await Login.ValidateLoginCredentials(client, email, password);
-
-            if (user != null)
+            if (email is not null)
             {
-                HttpContext.Session.SetString(nameof(AppUser.Email), user.Email);
-                return RedirectToAction("Dashboard", "AppUser");
+                AppUser user = dynamoDBContext.LoadAsync<AppUser>(email).Result;
+
+                if (user is not null)
+                {
+                    if (user.Password == password)
+                    {
+                        HttpContext.Session.SetString(nameof(AppUser.Email), user.Email);
+                        return RedirectToAction("Dashboard", "AppUser");
+                    }
+                }
             }
 
             ModelState.AddModelError("LoginFailed", "Email or Password is invalid.");
@@ -47,11 +53,20 @@ namespace MusicSubscriptionApp.Controllers
             return View();
         }
 
-
-
-
-        public IActionResult Privacy()
+        public IActionResult Register()
         {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Register([Bind("Email, Username, Password")] AppUser newUser)
+        {
+            var isSuccessful = await AppUser.CreateAppUser(dynamoDBContext, newUser);
+            if (isSuccessful)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+            ModelState.AddModelError("RegisterFailed", "The email already exists.");
             return View();
         }
 
