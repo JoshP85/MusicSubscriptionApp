@@ -36,7 +36,7 @@ namespace MusicSubscriptionApp.Controllers
         {
             if (email is not null)
             {
-                AppUser user = dynamoDBContext.LoadAsync<AppUser>(email).Result;
+                AppUser user = AppUser.GetAppUser(dynamoDBContext, email);
 
                 if (user is not null)
                 {

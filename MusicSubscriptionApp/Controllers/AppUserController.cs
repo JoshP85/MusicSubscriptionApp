@@ -21,7 +21,7 @@ namespace MusicSubscriptionApp.Controllers
 
         public IActionResult Dashboard()
         {
-            AppUser user = dynamoDBContext.LoadAsync<AppUser>(UserEmail).Result;
+            AppUser user = AppUser.GetAppUser(dynamoDBContext, UserEmail);
 
             return View(user);
         }
