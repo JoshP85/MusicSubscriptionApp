@@ -2,6 +2,7 @@ using Amazon;
 using Amazon.DynamoDBv2;
 using Amazon.DynamoDBv2.DataModel;
 using Amazon.Runtime;
+using Amazon.S3;
 using Microsoft.AspNetCore.HttpOverrides;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -32,6 +33,13 @@ var config = new AmazonDynamoDBConfig()
 var client = new AmazonDynamoDBClient(credentials, config);
 builder.Services.AddSingleton<IAmazonDynamoDB>(client);
 builder.Services.AddSingleton<IDynamoDBContext, DynamoDBContext>();
+var configS3 = new AmazonS3Config()
+{
+    RegionEndpoint = RegionEndpoint.APSoutheast2
+};
+var clientS3 = new AmazonS3Client(credentials, configS3);
+builder.Services.AddSingleton<IAmazonS3>(clientS3);
+
 
 var app = builder.Build();
 

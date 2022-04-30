@@ -1,12 +1,13 @@
 ﻿using Amazon.DynamoDBv2;
 using Amazon.DynamoDBv2.Model;
+using Amazon.S3;
 
 namespace MusicSubscriptionApp.Data
 {
 
     public class CreateTables
     {
-        public static async Task CreateMusicTableAsync(IAmazonDynamoDB client)
+        public static async Task CreateMusicTableAsync(IAmazonDynamoDB client, IAmazonS3 clientS3)
         {
             string tableName = "music";
 
@@ -75,7 +76,7 @@ namespace MusicSubscriptionApp.Data
             {
                 return;
             }
-            await SeedData.SeedMusicTable(client);
+            await SeedData.SeedMusicTable(client, clientS3);
         }
 
         public static async Task CreateLoginTableAsync(IAmazonDynamoDB client)

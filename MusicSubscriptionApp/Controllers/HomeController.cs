@@ -1,5 +1,6 @@
 ﻿using Amazon.DynamoDBv2;
 using Amazon.DynamoDBv2.DataModel;
+using Amazon.S3;
 using Microsoft.AspNetCore.Mvc;
 using MusicSubscriptionApp.Data;
 using MusicSubscriptionApp.Models;
@@ -12,19 +13,21 @@ namespace MusicSubscriptionApp.Controllers
     {
         private readonly IDynamoDBContext dynamoDBContext;
         private readonly IAmazonDynamoDB client;
+        private readonly IAmazonS3 clientS3;
         private readonly ILogger<HomeController> _logger;
 
-        public HomeController(IDynamoDBContext dynamoDBContext, IAmazonDynamoDB client, ILogger<HomeController> logger)
+        public HomeController(IDynamoDBContext dynamoDBContext, IAmazonDynamoDB client, IAmazonS3 clientS3, ILogger<HomeController> logger)
         {
             this.dynamoDBContext = dynamoDBContext;
             this.client = client;
+            this.clientS3 = clientS3;
             _logger = logger;
         }
 
         public async Task<IActionResult> IndexAsync()
         {
 
-            await CreateTables.CreateMusicTableAsync(client);
+            await CreateTables.CreateMusicTableAsync(client, clientS3);
 
             await CreateTables.CreateLoginTableAsync(client);
 
