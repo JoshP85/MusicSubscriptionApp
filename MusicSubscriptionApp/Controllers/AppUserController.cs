@@ -30,15 +30,20 @@ namespace MusicSubscriptionApp.Controllers
         [HttpPost]
         public async Task<IActionResult> Dashboard([Bind("Artist, Title, Year")] Query newQuery)
         {
-            var searchResult = await Query.CreateQueryFromInputAsync(client, newQuery);
-
-            if (searchResult.Count == 0)
-            {
-                ModelState.AddModelError("NoResults", "No result is retrieved. Please query again");
-            }
             AppUser user = AppUser.GetAppUser(dynamoDBContext, UserEmail);
             ViewBag.Username = user.Username;
-            ViewBag.SearchResult = searchResult;
+
+            var queryResult = await Query.CreateQueryFromInputAsync(client, newQuery);
+
+            if (queryResult == null)
+                return View();
+
+            if (queryResult.Count > 0)
+                ViewBag.SearchResult = queryResult;
+
+            if (queryResult.Count == 0)
+                ModelState.AddModelError("NoResults", "No result is retrieved. Please query again");
+
             return View();
         }
 

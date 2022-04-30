@@ -28,6 +28,7 @@
             <input type="submit" value="Query" class="btn btn-primary btn-login text-uppercase fw-bold" />
         </div>
     </form>
+    @Html.ValidationMessage("NoResults", new {@class = "text-danger"})
     @if(searchResults != null){
             <h3 class="display-6 text-center">Query Results</h3>
         <div>
