@@ -22,9 +22,27 @@ namespace MusicSubscriptionApp.Controllers
         public IActionResult Dashboard()
         {
             AppUser user = AppUser.GetAppUser(dynamoDBContext, UserEmail);
+            ViewBag.Username = user.Username;
 
-            return View(user);
+            return View();
         }
+
+        [HttpPost]
+        public async Task<IActionResult> Dashboard([Bind("Artist, Title, Year")] Query newQuery)
+        {
+            var searchResult = await Query.CreateQueryFromInputAsync(client, newQuery);
+
+            if (searchResult.Count == 0)
+            {
+                ModelState.AddModelError("NoResults", "No result is retrieved. Please query again");
+            }
+            AppUser user = AppUser.GetAppUser(dynamoDBContext, UserEmail);
+            ViewBag.Username = user.Username;
+            ViewBag.SearchResult = searchResult;
+            return View();
+        }
+
+
 
         public IActionResult Logout()
         {

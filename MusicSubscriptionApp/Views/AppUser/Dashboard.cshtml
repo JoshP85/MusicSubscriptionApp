@@ -1,5 +1,57 @@
-﻿@model MusicSubscriptionApp.Models.AppUser
+﻿@model MusicSubscriptionApp.Models.Subscription
 @{
+    var username = ViewBag.Username;
+    var searchResults = ViewBag.SearchResult;
 }
-<p>You are now logged in.. WOO!! @Model.Email</p>
-<a class="btn btn-primary btn-login text-uppercase fw-bold" asp-controller="AppUser" asp-action="Logout">Logout</a>
+<div class="text-center">
+    <h4 class=" mb-2 fw-bold fs-1 mt-4">Music Subcription Online</h4>
+    <p class="fw-light fs-4">@ViewBag.username</p>
+    <a class="btn btn-primary btn-login text-uppercase fw-bold" asp-controller="AppUser" asp-action="Logout">Logout</a>
+</div>
+
+<div>
+    <form asp-controller="AppUser" asp-action="Dashboard">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="form-floating mb-3">
+            <input asp-for="Artist" type="text" class="form-control" id="floatingInput" placeholder="Artist">
+            <label for="floatingInput">Artist</label>
+        </div>
+        <div class="form-floating mb-3">
+            <input asp-for="Title" type="text" class="form-control" id="floatingInput" placeholder="Title">
+            <label for="floatingInput">Title</label>
+        </div>
+        <div class="form-floating mb-3">
+            <input asp-for="Year" type="text" class="form-control" id="floatingInput" placeholder="Year">
+            <label for="floatingInput">Year</label>
+        </div>
+        <div class="form-group text-center">
+            <input type="submit" value="Query" class="btn btn-primary btn-login text-uppercase fw-bold" />
+        </div>
+    </form>
+    @if(searchResults != null){
+            <h3 class="display-6 text-center">Query Results</h3>
+        <div>
+            <table class="table table-striped" style="border-radius: 20px; margin-bottom: 14px;">
+                <thead>
+                    <tr>
+                        <th>Artist</th>
+                        <th>Title</th>
+                        <th>Year</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                @foreach (Query result in searchResults)
+                {
+                    <tr>
+                        <td>@result.Artist</td>
+                        <td>@result.Title</td>
+                        <td>@result.Year</td>
+                        <td>
+                            <a class="btn btn-primary text-uppercase fw-bold" asp-action="Subscribe" asp-route-id="@result.SongID">Subscribe</a>
+                        </td>
+                    </tr>
+                }
+            </table>
+        </div>
+    }
+</div>
