@@ -23,23 +23,29 @@ builder.Services.Configure<ForwardedHeadersOptions>(options =>
 });
 
 builder.WebHost.UseUrls("http://*:5000");
-// These keys should be in a secrets manager or file not added to git,
-// kept them here for simplicity for the assignment.
-var credentials = new BasicAWSCredentials("AKIAYINYRHMPCGZPOPO2", "9MOKzuJdYOXc/a/HsesuHxo1b8BbVfN+xZKDAT+r");
+
+var credentials = new BasicAWSCredentials(
+    File.ReadAllText(@"access-key.txt"), File.ReadAllText(@"private-key.txt"));
+
 var config = new AmazonDynamoDBConfig()
 {
     RegionEndpoint = RegionEndpoint.APSoutheast2
 };
+
 var client = new AmazonDynamoDBClient(credentials, config);
+
 builder.Services.AddSingleton<IAmazonDynamoDB>(client);
+
 builder.Services.AddSingleton<IDynamoDBContext, DynamoDBContext>();
+
 var configS3 = new AmazonS3Config()
 {
     RegionEndpoint = RegionEndpoint.APSoutheast2
 };
-var clientS3 = new AmazonS3Client(credentials, configS3);
-builder.Services.AddSingleton<IAmazonS3>(clientS3);
 
+var clientS3 = new AmazonS3Client(credentials, configS3);
+
+builder.Services.AddSingleton<IAmazonS3>(clientS3);
 
 var app = builder.Build();
 
@@ -66,3 +72,4 @@ app.MapControllerRoute(
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.Run();
+//"AKIAYINYRHMPCGZPOPO2", "9MOKzuJdYOXc/a/HsesuHxo1b8BbVfN+xZKDAT+r"

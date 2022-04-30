@@ -1,16 +1,10 @@
-﻿using Amazon;
-using Amazon.S3;
+﻿using Amazon.S3;
 using Amazon.S3.Model;
 
 namespace MusicSubscriptionApp.Data
 {
     public class S3ImageUpload
     {
-        private static readonly RegionEndpoint bucketRegion = RegionEndpoint.APSoutheast2;
-        static IAmazonS3 client = new AmazonS3Client(bucketRegion);
-
-
-
         public static async Task UploadToS3(string web_url, string songID, IAmazonS3 clientS3)
         {
             var wc = new HttpClient();
@@ -25,10 +19,8 @@ namespace MusicSubscriptionApp.Data
                 Key = songID,
                 ContentType = "image/jpeg",
                 InputStream = new MemoryStream(fileBytes)
-
             };
             PutObjectResponse response = await clientS3.PutObjectAsync(request);
-
         }
 
         public static byte[] ToArrayBytes(Stream input)

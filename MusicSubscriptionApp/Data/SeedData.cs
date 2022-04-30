@@ -21,7 +21,9 @@ namespace MusicSubscriptionApp.Data
             {
                 string imgurl = item.img_url.ToString();
                 string songID = Guid.NewGuid().ToString();
+
                 await S3ImageUpload.UploadToS3(imgurl, songID, clientS3);
+
                 var requestSeed = new PutItemRequest
                 {
                     TableName = "music",
