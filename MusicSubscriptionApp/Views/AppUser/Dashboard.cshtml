@@ -48,6 +48,9 @@
                         <td>@result.Title</td>
                         <td>@result.Year</td>
                         <td>
+                            <img src="@Url.Content("https://artistimages3655612.s3.ap-southeast-2.amazonaws.com/" + result.SongID)" alt="Image" style="width: 60px; height: 60px;" />
+                        </td>
+                        <td>
                             <a class="btn btn-primary text-uppercase fw-bold" asp-action="Subscribe" asp-route-id="@result.SongID">Subscribe</a>
                         </td>
                     </tr>

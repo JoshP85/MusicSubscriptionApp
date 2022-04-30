@@ -20,7 +20,7 @@ namespace MusicSubscriptionApp.Data
 
             var request = new PutObjectRequest
             {
-
+                CannedACL = S3CannedACL.PublicRead,
                 BucketName = "artistimages3655612",
                 Key = songID,
                 ContentType = "image/jpeg",
