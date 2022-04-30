@@ -72,4 +72,3 @@ app.MapControllerRoute(
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.Run();
-//"AKIAYINYRHMPCGZPOPO2", "9MOKzuJdYOXc/a/HsesuHxo1b8BbVfN+xZKDAT+r"
