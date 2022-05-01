@@ -396,3 +396,7 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
+/MusicSubscriptionApp/public.txt
+/MusicSubscriptionApp/private.txt
+/MusicSubscriptionApp/private-key.txt
+/MusicSubscriptionApp/access-key.txt

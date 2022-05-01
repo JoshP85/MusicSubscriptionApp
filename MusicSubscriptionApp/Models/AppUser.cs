@@ -19,7 +19,7 @@ namespace MusicSubscriptionApp.Models
         public string Password { get; set; }
 
         [DynamoDBProperty]
-        public virtual ICollection<Subscription> Subscriptions { get; set; }
+        public List<string> Subscriptions { get; set; }
 
 
         public static AppUser GetAppUser(IDynamoDBContext dynamoDBContext, string email)
@@ -34,16 +34,72 @@ namespace MusicSubscriptionApp.Models
                 return false;
             }
 
-            AppUser user = new AppUser
+            AppUser appUser = new AppUser
             {
                 Email = newUser.Email,
                 Password = newUser.Password,
                 Username = newUser.Username,
-                Subscriptions = null,
+                Subscriptions = new List<string> { },
             };
 
-            await dynamoDBContext.SaveAsync(user);
+            await dynamoDBContext.SaveAsync(appUser);
             return true;
+        }
+
+        public static void NewSubscription(string songID, string email, IDynamoDBContext dynamoDBContext)
+        {
+            AppUser appUser = GetAppUser(dynamoDBContext, email);
+
+            var subList = new List<string>();
+
+            subList.Add(songID);
+
+            if (appUser.Subscriptions != null)
+            {
+                subList.AddRange(appUser.Subscriptions);
+            }
+
+            appUser.Subscriptions = subList;
+
+            dynamoDBContext.SaveAsync(appUser);
+        }
+
+
+        public static List<Song> GetSubscriptionList(AppUser appUser, IDynamoDBContext dynamoDBContext)
+        {
+            if (appUser.Subscriptions == null)
+            {
+                return null;
+            }
+
+            var subList = new List<Song>();
+
+            foreach (var subscription in appUser.Subscriptions)
+            {
+                var song = dynamoDBContext.LoadAsync<Song>(subscription).Result;
+                subList.Add(song);
+            }
+
+            return subList;
+        }
+
+        internal static void RemoveSubscription(string songID, string email, IDynamoDBContext dynamoDBContext)
+        {
+            AppUser appUser = GetAppUser(dynamoDBContext, email);
+
+            List<Song> currentSubList = GetSubscriptionList(appUser, dynamoDBContext);
+
+            var newSubList = new List<string>();
+
+            foreach (Song sub in currentSubList)
+            {
+                if (sub.SongID != songID)
+                    newSubList.Add(sub.SongID);
+            }
+
+            appUser.Subscriptions = newSubList;
+
+            dynamoDBContext.SaveAsync(appUser);
         }
     }
 }
