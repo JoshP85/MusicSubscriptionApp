@@ -54,11 +54,16 @@ namespace MusicSubscriptionApp.Controllers
         }
 
 
-        public IActionResult NewSubscription([Bind("SongID, Email")] Song newSubscription, AppUser currentAppUser)
+        public IActionResult NewSubscription([Bind("SongID")] Song newSubscription, AppUser currentAppUser)
         {
-            //AppUser appUser = AppUser.GetAppUser(dynamoDBContext, currentAppUser.Email);
-
             AppUser.NewSubscription(newSubscription.SongID, currentAppUser.Email, dynamoDBContext);
+
+            return RedirectToAction("Dashboard", "AppUser");
+        }
+
+        public IActionResult RemoveSubscription([Bind("SongID")] Song subscription, AppUser currentAppUser)
+        {
+            AppUser.RemoveSubscription(subscription.SongID, currentAppUser.Email, dynamoDBContext);
 
             return RedirectToAction("Dashboard", "AppUser");
         }

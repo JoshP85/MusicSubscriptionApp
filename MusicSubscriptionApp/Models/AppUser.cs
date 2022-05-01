@@ -71,7 +71,9 @@ namespace MusicSubscriptionApp.Models
             {
                 return null;
             }
+
             var subList = new List<Song>();
+
             foreach (var subscription in appUser.Subscriptions)
             {
                 var song = dynamoDBContext.LoadAsync<Song>(subscription).Result;
@@ -79,6 +81,25 @@ namespace MusicSubscriptionApp.Models
             }
 
             return subList;
+        }
+
+        internal static void RemoveSubscription(string songID, string email, IDynamoDBContext dynamoDBContext)
+        {
+            AppUser appUser = GetAppUser(dynamoDBContext, email);
+
+            List<Song> currentSubList = GetSubscriptionList(appUser, dynamoDBContext);
+
+            var newSubList = new List<string>();
+
+            foreach (Song sub in currentSubList)
+            {
+                if (sub.SongID != songID)
+                    newSubList.Add(sub.SongID);
+            }
+
+            appUser.Subscriptions = newSubList;
+
+            dynamoDBContext.SaveAsync(appUser);
         }
     }
 }

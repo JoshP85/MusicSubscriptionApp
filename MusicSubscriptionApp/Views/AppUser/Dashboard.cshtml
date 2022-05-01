@@ -30,8 +30,9 @@
         </div>
     </form>
     @Html.ValidationMessage("NoResults", new {@class = "text-danger"})
-    @if(searchResults != null){
-            <h3 class="display-6 text-center">Query Results</h3>
+    @if (searchResults != null)
+    {
+        <h3 class="display-6 text-center">Query Results</h3>
         <div>
             <table class="table table-striped" style="border-radius: 20px; margin-bottom: 14px;">
                 <thead>
@@ -71,14 +72,18 @@
 </div>
 
 @foreach (var song in subscriptions)
-                {<div class="card border-0 shadow rounded-3 my-5">
-                        <div class="m-3">
-                            <p class="mb-0 mt-3">Remove</p>
-                            <hr />
-                                <img src="@Url.Content("https://artistimages3655612.s3.ap-southeast-2.amazonaws.com/" + song.SongID)" alt="Image" style="width: 60px; height: 60px;" />
-                            <p><b>@song.Artist</b></p>
-                            <p>@song.Title</p>
-                            <p>@song.Year</p>
-                        </div>
-                    </div>
-                }
+{
+    <div class="card border-0 shadow rounded-3 my-5">
+        <div class="m-3">
+            <form asp-action="RemoveSubscription">
+                <input type="hidden" name="SongID" value="@song.SongID" />
+                <input type="hidden" name="Email" value="@appUser.Email" />
+                <input class="btn btn-primary text-uppercase fw-bold" type="submit" asp-action="RemoveSubscription" value="Remove">
+            </form>
+            <img src="@Url.Content("https://artistimages3655612.s3.ap-southeast-2.amazonaws.com/" + song.SongID)" alt="Image" style="width: 60px; height: 60px;" />
+            <p><b>@song.Artist</b></p>
+            <p>@song.Title</p>
+            <p>@song.Year</p>
+        </div>
+    </div>
+}
