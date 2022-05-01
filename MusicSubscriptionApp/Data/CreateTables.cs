@@ -20,27 +20,17 @@ namespace MusicSubscriptionApp.Data
                               {
                                   new AttributeDefinition
                                   {
-                                      AttributeName = "Artist",
+                                      AttributeName = "SongID",
                                       AttributeType = "S"
                                   },
-                                  new AttributeDefinition
-                                  {
-                                      AttributeName = "Title",
-                                      AttributeType = "S"
-                                  }
                               },
                     KeySchema = new List<KeySchemaElement>()
                               {
                                   new KeySchemaElement
                                   {
-                                      AttributeName = "Artist",
+                                      AttributeName = "SongID",
                                       KeyType = "HASH"
                                   },
-                                  new KeySchemaElement
-                                  {
-                                      AttributeName = "Title",
-                                      KeyType = "RANGE"
-                                  }
                               },
                     ProvisionedThroughput = new ProvisionedThroughput
                     {

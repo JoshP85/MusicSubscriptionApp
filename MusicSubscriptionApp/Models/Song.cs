@@ -5,12 +5,13 @@ namespace MusicSubscriptionApp.Models
     [DynamoDBTable("music")]
     public class Song
     {
-
-
         [DynamoDBHashKey]
+        public string SongID { get; set; }
+
+        [DynamoDBProperty]
         public string Artist { get; set; }
 
-        [DynamoDBRangeKey]
+        [DynamoDBProperty]
         public string Title { get; set; }
 
         [DynamoDBProperty("img_url")]
@@ -22,7 +23,6 @@ namespace MusicSubscriptionApp.Models
         [DynamoDBProperty]
         public string Year { get; set; }
 
-        [DynamoDBProperty]
-        public string SongID { get; set; }
+
     }
 }

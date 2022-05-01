@@ -23,7 +23,7 @@ namespace MusicSubscriptionApp.Controllers
         {
             AppUser appUser = AppUser.GetAppUser(dynamoDBContext, UserEmail);
 
-            ViewBag.Subscriptions = appUser.Subscriptions;
+            ViewBag.Subscriptions = AppUser.GetSubscriptionList(appUser, dynamoDBContext);
 
             ViewBag.AppUser = appUser;
 
@@ -34,7 +34,10 @@ namespace MusicSubscriptionApp.Controllers
         public async Task<IActionResult> Dashboard([Bind("Artist, Title, Year")] Query newQuery)
         {
             AppUser appUser = AppUser.GetAppUser(dynamoDBContext, UserEmail);
+
             ViewBag.AppUser = appUser;
+
+            ViewBag.Subscriptions = AppUser.GetSubscriptionList(appUser, dynamoDBContext);
 
             var queryResult = await Query.CreateQueryFromInputAsync(client, newQuery);
 

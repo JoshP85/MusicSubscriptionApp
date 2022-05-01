@@ -2,6 +2,7 @@
 @{
     var appUser = ViewBag.AppUser;
     var searchResults = ViewBag.SearchResult;
+    var subscriptions = ViewBag.Subscriptions;
 }
 <div class="text-center">
     <h4 class=" mb-2 fw-bold fs-1 mt-4">Music Subscription Online</h4>
@@ -69,6 +70,15 @@
     }
 </div>
 
-<div>
-
-</div>
+@foreach (var song in subscriptions)
+                {<div class="card border-0 shadow rounded-3 my-5">
+                        <div class="m-3">
+                            <p class="mb-0 mt-3">Remove</p>
+                            <hr />
+                                <img src="@Url.Content("https://artistimages3655612.s3.ap-southeast-2.amazonaws.com/" + song.SongID)" alt="Image" style="width: 60px; height: 60px;" />
+                            <p><b>@song.Artist</b></p>
+                            <p>@song.Title</p>
+                            <p>@song.Year</p>
+                        </div>
+                    </div>
+                }

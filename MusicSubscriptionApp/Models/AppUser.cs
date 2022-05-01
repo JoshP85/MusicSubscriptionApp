@@ -63,5 +63,22 @@ namespace MusicSubscriptionApp.Models
 
             dynamoDBContext.SaveAsync(appUser);
         }
+
+
+        public static List<Song> GetSubscriptionList(AppUser appUser, IDynamoDBContext dynamoDBContext)
+        {
+            if (appUser.Subscriptions == null)
+            {
+                return null;
+            }
+            var subList = new List<Song>();
+            foreach (var subscription in appUser.Subscriptions)
+            {
+                var song = dynamoDBContext.LoadAsync<Song>(subscription).Result;
+                subList.Add(song);
+            }
+
+            return subList;
+        }
     }
 }
