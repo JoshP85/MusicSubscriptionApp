@@ -46,7 +46,7 @@ namespace MusicSubscriptionApp.Models
             return true;
         }
 
-        public static void NewSubscription(string songID, string email, IDynamoDBContext dynamoDBContext)
+        public static async Task NewSubscriptionAsync(string songID, string email, IDynamoDBContext dynamoDBContext)
         {
             AppUser appUser = GetAppUser(dynamoDBContext, email);
 
@@ -61,7 +61,7 @@ namespace MusicSubscriptionApp.Models
 
             appUser.Subscriptions = subList;
 
-            dynamoDBContext.SaveAsync(appUser);
+            await dynamoDBContext.SaveAsync(appUser);
         }
 
 
@@ -83,23 +83,31 @@ namespace MusicSubscriptionApp.Models
             return subList;
         }
 
-        internal static void RemoveSubscription(string songID, string email, IDynamoDBContext dynamoDBContext)
+        public static async Task RemoveSubscriptionAsync(string songID, string email, IDynamoDBContext dynamoDBContext)
         {
+
             AppUser appUser = GetAppUser(dynamoDBContext, email);
 
             List<Song> currentSubList = GetSubscriptionList(appUser, dynamoDBContext);
 
-            var newSubList = new List<string>();
-
-            foreach (Song sub in currentSubList)
+            if (currentSubList != null)
             {
-                if (sub.SongID != songID)
-                    newSubList.Add(sub.SongID);
+                var newSubList = new List<string>();
+
+                foreach (Song sub in currentSubList)
+                {
+                    if (sub.SongID != songID)
+                        newSubList.Add(sub.SongID);
+                }
+                if (newSubList.Count == 0)
+                    newSubList = null;
+
+                appUser.Subscriptions = newSubList;
+
+                await dynamoDBContext.SaveAsync(appUser);
             }
 
-            appUser.Subscriptions = newSubList;
 
-            dynamoDBContext.SaveAsync(appUser);
         }
     }
 }

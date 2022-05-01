@@ -53,16 +53,16 @@ namespace MusicSubscriptionApp.Controllers
             return View();
         }
 
-        public IActionResult NewSubscription([Bind("SongID")] Song newSubscription, AppUser currentAppUser)
+        public async Task<IActionResult> NewSubscriptionAsync([Bind("SongID")] Song newSubscription, AppUser currentAppUser)
         {
-            AppUser.NewSubscription(newSubscription.SongID, currentAppUser.Email, dynamoDBContext);
+            await AppUser.NewSubscriptionAsync(newSubscription.SongID, currentAppUser.Email, dynamoDBContext);
 
             return RedirectToAction("Dashboard", "AppUser");
         }
 
-        public IActionResult RemoveSubscription([Bind("SongID")] Song subscription, AppUser currentAppUser)
+        public async Task<IActionResult> RemoveSubscriptionAsync([Bind("SongID")] Song subscription, AppUser currentAppUser)
         {
-            AppUser.RemoveSubscription(subscription.SongID, currentAppUser.Email, dynamoDBContext);
+            await AppUser.RemoveSubscriptionAsync(subscription.SongID, currentAppUser.Email, dynamoDBContext);
 
             return RedirectToAction("Dashboard", "AppUser");
         }
