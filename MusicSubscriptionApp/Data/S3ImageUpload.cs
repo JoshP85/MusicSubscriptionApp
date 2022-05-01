@@ -5,10 +5,10 @@ namespace MusicSubscriptionApp.Data
 {
     public class S3ImageUpload
     {
-        public static async Task UploadToS3(string web_url, string songID, IAmazonS3 clientS3)
+        public static async Task UploadToS3(string img_url, string songID, IAmazonS3 clientS3)
         {
             var wc = new HttpClient();
-            Stream fileStream = await wc.GetStreamAsync(web_url);
+            Stream fileStream = await wc.GetStreamAsync(img_url);
 
             byte[] fileBytes = ToArrayBytes(fileStream);
 

@@ -19,7 +19,7 @@ namespace MusicSubscriptionApp.Models
         public string Password { get; set; }
 
         [DynamoDBProperty]
-        public virtual ICollection<Subscription> Subscriptions { get; set; }
+        public List<string> Subscriptions { get; set; }
 
 
         public static AppUser GetAppUser(IDynamoDBContext dynamoDBContext, string email)
@@ -34,16 +34,34 @@ namespace MusicSubscriptionApp.Models
                 return false;
             }
 
-            AppUser user = new AppUser
+            AppUser appUser = new AppUser
             {
                 Email = newUser.Email,
                 Password = newUser.Password,
                 Username = newUser.Username,
-                Subscriptions = null,
+                Subscriptions = new List<string> { },
             };
 
-            await dynamoDBContext.SaveAsync(user);
+            await dynamoDBContext.SaveAsync(appUser);
             return true;
+        }
+
+        public static void NewSubscription(string songID, string email, IDynamoDBContext dynamoDBContext)
+        {
+            AppUser appUser = GetAppUser(dynamoDBContext, email);
+
+            var subList = new List<string>();
+
+            subList.Add(songID);
+
+            if (appUser.Subscriptions != null)
+            {
+                subList.AddRange(appUser.Subscriptions);
+            }
+
+            appUser.Subscriptions = subList;
+
+            dynamoDBContext.SaveAsync(appUser);
         }
     }
 }

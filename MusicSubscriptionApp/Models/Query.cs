@@ -21,6 +21,8 @@ namespace MusicSubscriptionApp.Models
             string value2;
             string yearValue;
 
+            // If all fields are passed in, year is made null
+            // because having artist and title is unique enough
             if (newQuery.Artist != null && newQuery.Title != null)
                 newQuery.Year = null;
 

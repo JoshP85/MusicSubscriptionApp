@@ -63,6 +63,7 @@ namespace MusicSubscriptionApp.Data
                         { "User_Name", new AttributeValue {S = item.user_name } },
                         { "Password", new AttributeValue {S = item.password } },
                     }
+
                 };
                 await client.PutItemAsync(requestSeed);
             }

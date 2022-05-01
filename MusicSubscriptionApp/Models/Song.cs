@@ -3,7 +3,7 @@
 namespace MusicSubscriptionApp.Models
 {
     [DynamoDBTable("music")]
-    public class Subscription
+    public class Song
     {
 
 
