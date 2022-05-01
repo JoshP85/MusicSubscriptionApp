@@ -21,9 +21,50 @@ namespace MusicSubscriptionApp.Controllers
 
         public IActionResult Dashboard()
         {
-            AppUser user = AppUser.GetAppUser(dynamoDBContext, UserEmail);
+            AppUser appUser = AppUser.GetAppUser(dynamoDBContext, UserEmail);
 
-            return View(user);
+            ViewBag.Subscriptions = AppUser.GetSubscriptionList(appUser, dynamoDBContext);
+
+            ViewBag.AppUser = appUser;
+
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Dashboard([Bind("Artist, Title, Year")] Query newQuery)
+        {
+            AppUser appUser = AppUser.GetAppUser(dynamoDBContext, UserEmail);
+
+            ViewBag.AppUser = appUser;
+
+            ViewBag.Subscriptions = AppUser.GetSubscriptionList(appUser, dynamoDBContext);
+
+            var queryResult = await Query.CreateQueryFromInputAsync(client, newQuery);
+
+            if (queryResult == null)
+                return View();
+
+            if (queryResult.Count > 0)
+                ViewBag.QueryResult = queryResult;
+
+            if (queryResult.Count == 0)
+                ModelState.AddModelError("NoResults", "No result is retrieved. Please query again");
+
+            return View();
+        }
+
+        public IActionResult NewSubscription([Bind("SongID")] Song newSubscription, AppUser currentAppUser)
+        {
+            AppUser.NewSubscription(newSubscription.SongID, currentAppUser.Email, dynamoDBContext);
+
+            return RedirectToAction("Dashboard", "AppUser");
+        }
+
+        public IActionResult RemoveSubscription([Bind("SongID")] Song subscription, AppUser currentAppUser)
+        {
+            AppUser.RemoveSubscription(subscription.SongID, currentAppUser.Email, dynamoDBContext);
+
+            return RedirectToAction("Dashboard", "AppUser");
         }
 
         public IActionResult Logout()
