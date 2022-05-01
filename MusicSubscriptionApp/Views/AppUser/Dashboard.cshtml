@@ -1,7 +1,7 @@
 ﻿@model MusicSubscriptionApp.Models.Song
 @{
     var appUser = ViewBag.AppUser;
-    var searchResults = ViewBag.SearchResult;
+    var queryResults = ViewBag.QueryResult;
     var subscriptions = ViewBag.Subscriptions;
 }
 <div class="text-center">
@@ -9,81 +9,101 @@
     <p class="fw-light fs-4">@appUser.Username</p>
     <a class="btn btn-primary btn-login text-uppercase fw-bold" asp-controller="AppUser" asp-action="Logout">Logout</a>
 </div>
-
-<div>
-    <form asp-controller="AppUser" asp-action="Dashboard">
-        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-        <div class="form-floating mb-3">
-            <input asp-for="Artist" type="text" class="form-control" id="floatingInput" placeholder="Artist">
-            <label for="floatingInput">Artist</label>
-        </div>
-        <div class="form-floating mb-3">
-            <input asp-for="Title" type="text" class="form-control" id="floatingInput" placeholder="Title">
-            <label for="floatingInput">Title</label>
-        </div>
-        <div class="form-floating mb-3">
-            <input asp-for="Year" type="text" class="form-control" id="floatingInput" placeholder="Year">
-            <label for="floatingInput">Year</label>
-        </div>
-        <div class="form-group text-center">
-            <input type="submit" value="Query" class="btn btn-primary btn-login text-uppercase fw-bold" />
-        </div>
-    </form>
-    @Html.ValidationMessage("NoResults", new {@class = "text-danger"})
-    @if (searchResults != null)
-    {
-        <h3 class="display-6 text-center">Query Results</h3>
+<div class="row">
+    <div class="col-4 my-5">
         <div>
-            <table class="table table-striped" style="border-radius: 20px; margin-bottom: 14px;">
-                <thead>
-                    <tr>
-                        <th>Artist</th>
-                        <th>Title</th>
-                        <th>Year</th>
-                        <th></th>
-                    </tr>
-                </thead>
-                @foreach (Query result in searchResults)
-                {
-                    <tr>
-                        <td>@result.Artist</td>
-                        <td>@result.Title</td>
-                        <td>@result.Year</td>
-                        <td>
-                            <img src="@Url.Content("https://artistimages3655612.s3.ap-southeast-2.amazonaws.com/" + result.SongID)" alt="Image" style="width: 60px; height: 60px;" />
-                        </td>
-                        <td>
-                            <form asp-action="NewSubscription">
-                                <div class="form-group">
-                                    <input type="hidden" name="SongID" value="@result.SongID" />
-                                    <input type="hidden" name="Email" value="@appUser.Email" />
-
-                                </div>
-                                <div class="form-group">
-                                    <input class="btn btn-primary text-uppercase fw-bold" type="submit" asp-action="NewSubscription" value="Subscribe">
-                                </div>
-                            </form>
-                        </td>
-                    </tr>
-                }
-            </table>
-        </div>
-    }
-</div>
-
-@foreach (var song in subscriptions)
-{
-    <div class="card border-0 shadow rounded-3 my-5">
-        <div class="m-3">
-            <form asp-action="RemoveSubscription">
-                <input type="hidden" name="SongID" value="@song.SongID" />
-                <input type="hidden" name="Email" value="@appUser.Email" />
-                <input class="btn btn-primary text-uppercase fw-bold" type="submit" asp-action="RemoveSubscription" value="Remove">
+            <form asp-controller="AppUser" asp-action="Dashboard">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-floating mb-3">
+                    <input asp-for="Artist" type="text" class="form-control" id="floatingInput" placeholder="Artist">
+                    <label for="floatingInput">Artist</label>
+                </div>
+                <div class="form-floating mb-3">
+                    <input asp-for="Title" type="text" class="form-control" id="floatingInput" placeholder="Title">
+                    <label for="floatingInput">Title</label>
+                </div>
+                <div class="form-floating mb-3">
+                    <input asp-for="Year" type="text" class="form-control" id="floatingInput" placeholder="Year">
+                    <label for="floatingInput">Year</label>
+                </div>
+                <div class="form-group text-center">
+                    <input type="submit" value="Query" class="btn btn-primary btn-login text-uppercase fw-bold" />
+                </div>
             </form>
-            <img src="@Url.Content("https://artistimages3655612.s3.ap-southeast-2.amazonaws.com/" + song.SongID)" alt="Image" style="width: 60px; height: 60px;" />
-            <p><b>@song.Artist</b></p>
-            <p>@song.Title</p>
-            <p>@song.Year</p>
+            @Html.ValidationMessage("NoResults", new {@class = "text-danger"})
+            @if (queryResults != null)
+            {
+                <h3 class="display-6 text-center mt-4">Query Results</h3>
+                <div class="">
+                    <table class="table table-striped" style="border-radius: 20px; margin-bottom: 14px;">
+                        <thead>
+                            <tr>
+                                <th>Artist</th>
+                                <th>Title</th>
+                                <th>Year</th>
+                                <th></th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        @foreach (Query result in queryResults)
+                        {
+                            <tr>
+                                <td>@result.Artist</td>
+                                <td>@result.Title</td>
+                                <td>@result.Year</td>
+                                <td>
+                                    <img src="@Url.Content("https://artistimages3655612.s3.ap-southeast-2.amazonaws.com/" + result.SongID)" alt="Image" style="width: 60px; height: 60px;" />
+                                </td>
+                                <td>
+                                    <form asp-action="NewSubscription">
+                                        <div class="form-group">
+                                            <input type="hidden" name="SongID" value="@result.SongID" />
+                                            <input type="hidden" name="Email" value="@appUser.Email" />
+                                        </div>
+                                        <div class="form-group">
+                                            <input class="btn btn-primary text-uppercase fw-bold" type="submit" asp-action="NewSubscription" value="Subscribe">
+                                        </div>
+                                    </form>
+                                </td>
+                            </tr>
+                        }
+                    </table>
+                </div>
+            }
         </div>
     </div>
-}
+    <div class="col">
+
+        @foreach (var song in subscriptions)
+        {
+            <div class="card border-0 shadow rounded-3 ms-5 my-5">
+                <div class="m-3">
+
+                    <div class="container">
+                        <div class="row">
+
+                            <div class="col-3 align-self-start">
+                                <img src="@Url.Content("https://artistimages3655612.s3.ap-southeast-2.amazonaws.com/" + song.SongID)" alt="Image" style="width: 120px; height: 120px;" />
+                            </div>
+
+                            <div class="col align-self-center">
+
+                                <p><b>@song.Artist</b></p>
+                                <p>@song.Title</p>
+                                <p>@song.Year</p>
+                            </div>
+                            <div class="col-2 align-self-end">
+                                <form asp-action="RemoveSubscription">
+                                    <input type="hidden" name="SongID" value="@song.SongID" />
+                                    <input type="hidden" name="Email" value="@appUser.Email" />
+                                    <input class="btn btn-primary text-uppercase fw-bold " type="submit" asp-action="RemoveSubscription" value="Remove">
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+
+    </div>
+</div>

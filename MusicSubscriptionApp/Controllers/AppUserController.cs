@@ -45,14 +45,13 @@ namespace MusicSubscriptionApp.Controllers
                 return View();
 
             if (queryResult.Count > 0)
-                ViewBag.SearchResult = queryResult;
+                ViewBag.QueryResult = queryResult;
 
             if (queryResult.Count == 0)
                 ModelState.AddModelError("NoResults", "No result is retrieved. Please query again");
 
             return View();
         }
-
 
         public IActionResult NewSubscription([Bind("SongID")] Song newSubscription, AppUser currentAppUser)
         {
@@ -67,8 +66,6 @@ namespace MusicSubscriptionApp.Controllers
 
             return RedirectToAction("Dashboard", "AppUser");
         }
-
-
 
         public IActionResult Logout()
         {
